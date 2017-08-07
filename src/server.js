@@ -3,7 +3,7 @@ var bodyParser = require("body-parser");
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
-var COLLECTION = "world";
+var COLLECTION = "factbook";
 
 var app = express();
 app.use(bodyParser.json());
@@ -35,12 +35,12 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
-app.get("/api/factbook", function(req, res) {
-  db.collection(COLLECTION).find({}).toArray(function(err, docs) {
+app.get("/api/factbook/:id", function(req, res) {
+  db.collection(COLLECTION).findOne({ _id: new ObjectID(req.params.id) }, function(err, doc) {
     if (err) {
-      handleError(res, err.message, "Failed to get contacts.");
+      handleError(res, err.message, "Failed to get contact");
     } else {
-      res.status(200).json(docs);
+      res.status(200).json(doc);
     }
   });
 });
