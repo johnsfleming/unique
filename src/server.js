@@ -35,12 +35,33 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
-app.get("/api/factbook/:id", function(req, res) {
-  db.collection(COLLECTION).findOne({ _id: new ObjectID(req.params.id) }, function(err, doc) {
+/*  "/api/contacts"
+ *    GET: finds all contacts
+ *    POST: creates a new contact
+ */
+
+app.get("/api/factbook", function(req, res) {
+  db.collection(COLLECTION).find({}).toArray(function(err, docs) {
     if (err) {
-      handleError(res, err.message, "Failed to get contact");
+      handleError(res, err.message, "Failed to get contacts.");
     } else {
-      res.status(200).json(doc);
+      res.status(200).json(docs);
+    }
+  });
+});
+
+app.post("/api/contacts", function(req, res) {
+  var newContact = req.body;
+
+  if (!req.body.name) {
+    handleError(res, "Invalid user input", "Must provide a name.", 400);
+  }
+
+  db.collection(COLLECTION).insertOne(newContact, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to create new contact.");
+    } else {
+      res.status(201).json(doc.ops[0]);
     }
   });
 });
