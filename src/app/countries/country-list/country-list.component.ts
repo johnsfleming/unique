@@ -31,6 +31,8 @@ export class CountryListComponent implements OnInit {
       .then((world: Country) => {
         this.world = world;
       });
+
+      this.demographic = this.world.population;
   }
 
   private getIndexOfCountry = (countryId: String) => {
@@ -41,5 +43,6 @@ export class CountryListComponent implements OnInit {
 
   selectCountry(country: Country) {
     this.selectedCountry = country
+    this.demographic = this.selectedCountry.population;
   }
 }
