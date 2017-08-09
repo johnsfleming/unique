@@ -15,7 +15,8 @@ export class CountryListComponent implements OnInit {
   selectedCountry: Country
   world: Country
   demographic: number
-  demographicString: string
+  currentDemographicString: string
+  previousDemographicString: string
 
   constructor(private countryService: CountryService) { }
 
@@ -45,7 +46,15 @@ export class CountryListComponent implements OnInit {
 
   selectCountry(country: Country) {
     this.selectedCountry = country;
+    var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(',');
+    $('#demographic')
+      .prop('number', this.demographic)
+      .animateNumber(
+      {
+        number: this.selectedCountry.population,
+        numberStep: comma_separator_number_step
+      }
+    );
     this.demographic = this.selectedCountry.population;
-    this.demographicString = this.demographic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 }
