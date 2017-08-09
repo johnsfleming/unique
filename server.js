@@ -8,6 +8,9 @@ var COLLECTION = "factbook";
 var app = express();
 app.use(bodyParser.json());
 
+var distDir = __dirname + "/dist/";
+app.use(express.static(distDir));
+
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
 
@@ -37,17 +40,66 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
-/*  "/api/contacts"
- *    GET: finds all contacts
- *    POST: creates a new contact
- */
+app.get("/", function(req, res) {
+  db.collection(COLLECTION).find({"People and Society.Population.text": /7,323,187,457/ }).toArray(function(err, docs){
+    res.json(docs);
+  });
+  
+});
 
 app.get("/api/factbook", function(req, res) {
-  db.collection(COLLECTION).find({}).toArray(function(err, docs) {
+  db.collection(COLLECTION).find({ $and: [ {"Government.Country name.conventional short form.text": { $exists: true}}, {"People and Society.Population.text": { $ne: "uninhabited"}}, {"People and Society.Population.text": { $ne: "no indigenous inhabitants"}}, {"People and Society.Population.text": { $ne: "no indigenous inhabitants, but there are both permanent and summer-only staffed research stations"} } ] }).toArray(function(err, docs) {
     if (err) {
-      handleError(res, err.message, "Failed to get contacts.");
+      handleError(res, err.message, "Failed to get countries.");
     } else {
-      res.status(200).json(docs);
+      var populations = [];
+
+      docs.forEach(function(country){
+        var parsedCountry = {};
+        var population;
+        var name;
+        var age = {};
+        var gender = {};
+        var extraText = country["People and Society"]["Population"]["text"].match(/\s\([a-zA-Z]{0,4}\s?20\d\d est.\)/);
+        if(extraText){
+          population = parseInt(country["People and Society"]["Population"]["text"].slice(0,extraText.index).replace(/,/g, ""));
+        }
+        else{
+          population = parseInt(country["People and Society"]["Population"]["text"].replace(/,/g, ""));
+        }
+        if(country["Government"]["Country name"]["conventional short form"]["text"]!=="none"){
+          name = country["Government"]["Country name"]["conventional short form"]["text"];
+        }
+        else{
+          name = country["Government"]["Country name"]["conventional long form"]["text"];
+        }
+        var ageObject = country["People and Society"]["Age structure"];
+        for(var range in ageObject){
+          if (!ageObject.hasOwnProperty(range)) {
+            //The current property is not a direct property of p
+            continue;
+          }
+          else{
+            age[range] = parseFloat(ageObject[range]["text"]);
+          }
+        }
+        var genderObject = country["People and Society"]["Sex ratio"];
+        for(var range in genderObject){
+          if (!genderObject.hasOwnProperty(range)) {
+            //The current property is not a direct property of p
+            continue;
+          }
+          else{
+            gender[range] = parseFloat(genderObject[range]["text"]);
+          }
+        }
+        parsedCountry.name = name;
+        parsedCountry.population = population;
+        parsedCountry.age = age;
+        parsedCountry.gender = gender;
+        populations.push(parsedCountry);
+      });
+      res.status(200).json(populations);
     }
   });
 });
