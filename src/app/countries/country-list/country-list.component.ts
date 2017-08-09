@@ -14,6 +14,7 @@ export class CountryListComponent implements OnInit {
   countries: Country[]
   selectedCountry: Country
   world: Country
+  demographic: number
 
   constructor(private countryService: CountryService) { }
 
