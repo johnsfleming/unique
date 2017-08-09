@@ -12,6 +12,7 @@ import { CountryDetailsComponent } from '../country-details/country-details.comp
 })
 export class CountryListComponent implements OnInit {
 
+  world: World[]
   countries: Country[]
   selectedCountry: Country
 
