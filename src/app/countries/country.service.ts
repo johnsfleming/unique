@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Country } from './country';
-import { World } from './country';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class CountryService {
   	private countryUrl = '/api/factbook';
-  	private worldUrl = '/';
+  	private worldUrl = '/api/earth';
 
   	constructor (private http: Http) {}
 
@@ -19,12 +18,12 @@ export class CountryService {
 	             .catch(this.handleError);
 	}
 
-	//get ("/")
-	getWorld(): Promise<void | World[]> {
+	//get("/api/earth")
+	getEarth(): Promise<void | Country> {
 	  return this.http.get(this.worldUrl)
-	  			 .toPromise()
-	  			 .then(response => response.json() as World[])
-	  			 .catch(this.handleError);
+	             .toPromise()
+	             .then(response => response.json() as Country)
+	             .catch(this.handleError);
 	}
 
 	private handleError (error: any) {

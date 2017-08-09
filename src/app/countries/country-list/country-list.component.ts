@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Country } from '../country';
-import { World } from '../country';
 import { CountryService } from '../country.service';
 import { CountryDetailsComponent } from '../country-details/country-details.component';
 
@@ -12,9 +11,9 @@ import { CountryDetailsComponent } from '../country-details/country-details.comp
 })
 export class CountryListComponent implements OnInit {
 
-  world: World[]
   countries: Country[]
   selectedCountry: Country
+  world: Country
 
   constructor(private countryService: CountryService) { }
 
@@ -28,13 +27,10 @@ export class CountryListComponent implements OnInit {
       });
 
      this.countryService
-     .getWorld()
-     .then((world: World[]) => {
-       this.world = world.map((world) => {
-         return world;
-       });
-     });
-
+      .getEarth()
+      .then((world: Country) => {
+        this.world = world;
+      });
   }
 
   private getIndexOfCountry = (countryId: String) => {

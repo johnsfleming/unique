@@ -6,7 +6,7 @@
         *ngFor="let country of countries"
         (click)="selectCountry(country)"
         [class.active]="country === selectedCountry">
-        {{country.name}}
+        {{country.name}} : {{country.population}}
       </li>
     </ul>
   </div>
