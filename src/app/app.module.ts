@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import * as $ from 'jquery';
 
 import { AppComponent } from './app.component';
 import { CountryDetailsComponent } from './countries/country-details/country-details.component';
