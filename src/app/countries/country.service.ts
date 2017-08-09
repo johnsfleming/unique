@@ -23,7 +23,7 @@ export class CountryService {
 	getWorld(): Promise<void | World[]> {
 	  return this.http.get(this.worldUrl)
 	  			 .toPromise()
-	  			 .then(response => response.json as World[])
+	  			 .then(response => response.json() as World[])
 	  			 .catch(this.handleError);
 	}
 

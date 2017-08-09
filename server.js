@@ -42,7 +42,44 @@ function handleError(res, reason, message, code) {
 
 app.get("/", function(req, res) {
   db.collection(COLLECTION).find({"People and Society.Population.text": /7,323,187,457/ }).toArray(function(err, docs){
-    res.json(docs);
+    var world = [];
+    
+    docs.forEach(function(world)){
+      var world = {};
+      var population;
+      var name = "World";
+      var age = {};
+      var gender = {};
+      var extraText = country["People and Society"]["Population"]["text"].match(/\s\([a-zA-Z]{0,4}\s?20\d\d est.\)/);
+      population = parseInt(country["People and Society"]["Population"]["text"].slice(0,extraText.index).replace(/,/g, ""));
+      var ageObject = country["People and Society"]["Age structure"];
+        for(var range in ageObject){
+          if (!ageObject.hasOwnProperty(range)) {
+            //The current property is not a direct property of p
+            continue;
+          }
+          else{
+            age[range] = parseFloat(ageObject[range]["text"]);
+          }
+        }
+        var genderObject = country["People and Society"]["Sex ratio"];
+        for(var range in genderObject){
+          if (!genderObject.hasOwnProperty(range)) {
+            //The current property is not a direct property of p
+            continue;
+          }
+          else{
+            gender[range] = parseFloat(genderObject[range]["text"]);
+          }
+        }
+        world.name = name;
+        world.population = population;
+        world.age = age;
+        world.gender = gender;
+        populations.push(world);
+    }
+
+    res.status(200).json(worlds);
   });
   
 });
