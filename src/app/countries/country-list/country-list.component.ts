@@ -28,9 +28,9 @@ export class CountryListComponent implements OnInit {
      this.countryService
      .getWorld()
      .then((world: World[]) => {
-       this.world = world.map((world)) => {
+       this.world = world.map((world) => {
          return world;
-       }
+       });
      });
 
   }
