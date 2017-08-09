@@ -46,8 +46,8 @@ export class CountryListComponent implements OnInit {
 
   selectCountry(country: Country) {
     this.selectedCountry = country;
-    var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(',');
-    $('#demographic')
+    var comma_separator_number_step = (<any>$).animateNumber.numberStepFactories.separator(',');
+    (<any>$('#demographic'))
       .prop('number', this.demographic)
       .animateNumber(
       {
