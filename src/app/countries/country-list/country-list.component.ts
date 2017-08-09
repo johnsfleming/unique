@@ -15,6 +15,7 @@ export class CountryListComponent implements OnInit {
   selectedCountry: Country
   world: Country
   demographic: number
+  demographicString: string
 
   constructor(private countryService: CountryService) { }
 
@@ -43,7 +44,8 @@ export class CountryListComponent implements OnInit {
   }
 
   selectCountry(country: Country) {
-    this.selectedCountry = country
+    this.selectedCountry = country;
     this.demographic = this.selectedCountry.population;
+    this.demographicString = this.demographic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 }
