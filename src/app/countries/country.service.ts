@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Country } from './country';
+import { World } from './country';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
