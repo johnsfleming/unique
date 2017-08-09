@@ -24,6 +24,15 @@ export class CountryListComponent implements OnInit {
           return country;
         });
       });
+
+     this.countryService
+     .getWorld()
+     .then((world: World[]) => {
+       this.world = world.map((world)) => {
+         return world;
+       }
+     });
+
   }
 
   private getIndexOfCountry = (countryId: String) => {

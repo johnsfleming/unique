@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class CountryService {
   	private countryUrl = '/api/factbook';
+  	private worldUrl = '/';
 
   	constructor (private http: Http) {}
 
@@ -15,6 +16,14 @@ export class CountryService {
 	             .toPromise()
 	             .then(response => response.json() as Country[])
 	             .catch(this.handleError);
+	}
+
+	//get ("/")
+	getWorld(): Promise<void | World[]> {
+	  return this.http.get(this.worldUrl)
+	  			 .toPromise()
+	  			 .then(response => response.json as World[])
+	  			 .catch(this.handleError);
 	}
 
 	private handleError (error: any) {
