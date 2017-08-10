@@ -6,7 +6,7 @@
       <select name="countrySelect" id="countrySelect" [(ngModel)]="demographicString">
         <option 
           *ngFor="let country of countries"
-          [ngValue]="{{country.population}}">
+          [value]="country.population">
           {{country.name}}
         </option>
       </select>
