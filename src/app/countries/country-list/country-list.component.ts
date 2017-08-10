@@ -33,9 +33,8 @@ export class CountryListComponent implements OnInit {
      this.countryService
       .getEarth()
       .then((world: Country) => {
-        this.world = world;
+        this.countries.unshift(world);
         this.demographicString = world.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        this.countries.unshift(this.world);
       });
 
       
@@ -45,6 +44,10 @@ export class CountryListComponent implements OnInit {
     return this.countries.findIndex((country) => {
       return country._id === countryId;
     });
+  }
+
+  demographicToString(demographic: number){
+    return demographic.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   selectCountry(country: Country) {
