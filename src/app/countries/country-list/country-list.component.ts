@@ -34,7 +34,7 @@ export class CountryListComponent implements OnInit {
       .getEarth()
       .then((world: Country) => {
         this.countries.unshift(world);
-        this.demographicString = world.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        this.demographic = world.population;
       });
 
       
