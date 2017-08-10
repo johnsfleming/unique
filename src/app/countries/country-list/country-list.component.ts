@@ -26,15 +26,18 @@ export class CountryListComponent implements OnInit {
         this.countries = countries.map((country) => {
           return country;
         });
+        this.countries.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} ); 
+
       });
 
      this.countryService
       .getEarth()
       .then((world: Country) => {
         this.world = world;
+        this.demographicString = world.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       });
 
-      this.demographicString = this.world.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      
   }
 
   private getIndexOfCountry = (countryId: String) => {
