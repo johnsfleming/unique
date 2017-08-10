@@ -33,11 +33,10 @@ export class CountryListComponent implements OnInit {
      this.countryService
       .getEarth()
       .then((world: Country) => {
-        this.countries.unshift(world);
         this.demographic = world.population;
+        this.world = world;
       });
 
-      
   }
 
   private getIndexOfCountry = (countryId: String) => {
