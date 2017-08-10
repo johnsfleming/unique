@@ -4,6 +4,9 @@
     <form name="myForm">
       <label for="countrySelect"> Where do you live? </label>
       <select name="countrySelect" id="countrySelect" [(ngModel)]="demographic">
+        <option [value]="world.population">
+          {{world.name}}
+        </option>
         <option 
           *ngFor="let country of countries"
           [value]="country.population">
@@ -11,6 +14,5 @@
         </option>
       </select>
     </form>
-    {{world.name}}
   </div>
 </div>
