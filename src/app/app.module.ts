@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule }   from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import * as $ from 'jquery';
 
@@ -15,7 +16,8 @@ import { CountryListComponent } from './countries/country-list/country-list.comp
   ],
   imports: [
     BrowserModule,
-    HttpModule
+    HttpModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
