@@ -33,8 +33,8 @@ export class CountryListComponent implements OnInit {
      this.countryService
       .getEarth()
       .then((world: Country) => {
-        this.world = world;
         this.demographicString = world.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        this.countries.unshift(world);
       });
 
       
