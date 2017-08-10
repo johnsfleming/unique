@@ -4,7 +4,7 @@
     <select ng-model="demographicString">
       <option 
         *ngFor="let country of countries"
-        value="{{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','')}}">
+        value="{{country.population}}">
         {{country.name}}
       </option>
     </select>
