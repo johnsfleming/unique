@@ -1,13 +1,12 @@
 <div class="row">
   <div class="col-md-5">
     <h2>You are 1 in <span id="demographic">{{demographicString}}</span></h2>
-    <ul class="list-group">
-      <li class="list-group-item"
+    <select ng-model="demographicString">
+      <option 
         *ngFor="let country of countries"
-        (click)="selectCountry(country)"
-        [class.active]="country === selectedCountry">
+        value="{{country.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','')}}">
         {{country.name}}
-      </li>
-    </ul>
+      </option>
+    </select>
   </div>
 </div>

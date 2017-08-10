@@ -34,7 +34,7 @@ export class CountryListComponent implements OnInit {
         this.world = world;
       });
 
-      this.demographic = this.world.population;
+      this.demographicString = this.world.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   private getIndexOfCountry = (countryId: String) => {
