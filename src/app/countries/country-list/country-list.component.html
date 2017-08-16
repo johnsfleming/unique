@@ -1,18 +1,60 @@
-<div class="row">
-  <div class="col-md-5">
-    <h2>You are 1 in <span id="demographic">{{demographicToString(demographic)}}</span></h2>
+<div class="row" *ngIf="isDataAvailable">
+  <div class="col-4 offset-4" style="height:75vw;">
+    <h2 class="text-center page-header">You are 1 in <span id="demographic" counto [step]="50" [countTo]="demographic" [countFrom]="previousdemographic" [duration]="4" (countoChange)="counto = $event">{{counto}}</span></h2>
+    <div class="form-group">
     <form name="myForm">
       <label for="countrySelect"> Where do you live? </label>
-      <select name="countrySelect" id="countrySelect" [(ngModel)]="demographic">
-        <option [value]="world.population">
+      <select class="form-control" name="countrySelect" id="countrySelect" [(ngModel)]="selectedCountry" (ngModelChange)="countryChange()">
+        <option [ngValue]="world">
           {{world.name}}
         </option>
         <option 
           *ngFor="let country of countries"
-          [value]="country.population">
+          [ngValue]="country">
           {{country.name}}
         </option>
       </select>
+      <br>
+      <label for="ageSelect">How old are you?</label>
+      <select class="form-control" name="ageSelect" id="ageSelect" [(ngModel)]="selectedAgeRange" (ngModelChange)="onChange()">
+        <option 
+          *ngFor="let age of selectedCountry['age'] | ObjNgFor; trackBy:identify"
+          [ngValue]="age.key">
+          {{age.key}}
+        </option>
+      </select>
+      <Br>
+      <label for="genderSelect">What gender are you?</label>
+      <select class="form-control" name="genderSelect" id="genderSelect" [(ngModel)]="gender" (ngModelChange)="onChange()">
+        <option>Leave blank</option>
+        <option>Male</option>
+        <option>Female</option>
+      </select>
+      <br>
+      <label for="religionSelect">What religion are you?</label>
+      <select class="form-control" name="religionSelect" id="religionSelect" [(ngModel)]="selectedReligion" (ngModelChange)="onChange()">
+        <option 
+          *ngFor="let religion of selectedCountry['religions'] | ObjNgFor; trackBy:identify"
+          [ngValue]="religion.key" [disabled]="religion.key==='No data available'">
+          {{religion.key}}
+        </option>
+      </select>
+      <br>
+      <label for="ethnicSelect">What ethnic group do you belong to?</label>
+      <select class="form-control" name="ethnicSelect" id="ethnicSelect" [(ngModel)]="selectedEthnicGroup" (ngModelChange)="onChange()">
+        <option 
+          *ngFor="let group of selectedCountry['ethnicGroups'] | ObjNgFor; trackBy:identify"
+          [ngValue]="group.key" [disabled]="group.key==='No data available'">
+          {{group.key}}
+        </option>
+      </select>
     </form>
+    </div>
   </div>
 </div>
+<footer class="panel footer" *ngIf="isDataAvailable">
+  <div class="container-fluid" id="footerContainer">
+    <p class="text-muted">All data pulled from the 2016 edition of the CIA World Factbook.</p>
+    <span class="text-muted">Designed and developed by <a href="https://github.com/johnsfleming" target="_blank">John Fleming</a></span>
+  </div>
+</footer>

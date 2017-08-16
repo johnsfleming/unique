@@ -15,7 +15,7 @@ app.use(express.static(distDir));
 var db;
 
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, database) {
+mongodb.MongoClient.connect("mongodb://heroku_4hl01spr:lhnj84jka2921l2o9hqi5c1t3h@ds161041.mlab.com:61041/heroku_4hl01spr", function (err, database) {
   if (err) {
     console.log(err);
     process.exit(1);
@@ -40,6 +40,12 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
+function capitalizeFirstLetter(string) {
+  string = string.trim();
+  string = string.replace("includes ","");
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 app.get("/api/earth", function(req, res) {
 
   var earth = db.collection(COLLECTION).findOne({"People and Society.Population.text": /7,323,187,457/});
@@ -48,8 +54,10 @@ app.get("/api/earth", function(req, res) {
     var world = {};
     var population;
     var name = "World";
-    var age = {};
+    var age = {"Leave blank": 100};
     var gender = {};
+    var religions = {"Leave blank": 100};
+    var ethnicGroups = {"Leave blank": 100, "No data available": 100};
     var extraText = data["People and Society"]["Population"]["text"].match(/\s\([a-zA-Z]{0,4}\s?20\d\d est.\)/);
     population = parseInt(data["People and Society"]["Population"]["text"].slice(0,extraText.index).replace(/,/g, ""));
     var ageObject = data["People and Society"]["Age structure"];
@@ -72,10 +80,26 @@ app.get("/api/earth", function(req, res) {
         gender[range] = parseFloat(genderObject[range]["text"]);
       }
     }
+    var religionsRE = /([a-z\-\']*\s?[a-z\-\']*)(?:\s\([^)]+\))?\s(\d+\.?\d{0,2})%/ig;
+    if(data["People and Society"]["Religions"] != undefined){
+      var religionsString = data["People and Society"]["Religions"]["text"];
+      var religionsArray;
+      while ((religionsArray = religionsRE.exec(religionsString)) !== null) {
+        religions[capitalizeFirstLetter(religionsArray[1])] = parseFloat(religionsArray[2]);
+      }
+      if(Object.keys(religions).length === 1){
+        religions["No data available"] = 100;
+      }
+    }
+    else{
+      religions["No data available"] = 100;
+    }
     world.name = name;
     world.population = population;
     world.age = age;
     world.gender = gender;
+    world.religions = religions;
+    world.ethnicGroups = ethnicGroups;
 
     res.status(200).json(world);
   });
@@ -93,8 +117,10 @@ app.get("/api/factbook", function(req, res) {
         var parsedCountry = {};
         var population;
         var name;
-        var age = {};
+        var age = {"Leave blank": 100};
         var gender = {};
+        var religions = {"Leave blank": 100};
+        var ethnicGroups = {"Leave blank": 100};
         var extraText = country["People and Society"]["Population"]["text"].match(/\s\([a-zA-Z]{0,4}\s?20\d\d est.\)/);
         if(extraText){
           population = parseInt(country["People and Society"]["Population"]["text"].slice(0,extraText.index).replace(/,/g, ""));
@@ -125,13 +151,49 @@ app.get("/api/factbook", function(req, res) {
             continue;
           }
           else{
-            gender[range] = parseFloat(genderObject[range]["text"]);
+            if(range!=="at birth"){
+              gender[range] = parseFloat(genderObject[range]["text"]);
+            }
           }
         }
+        
+        var religionsRE = /([a-z\-\']*\s?[a-z\-\']*\s?[a-z\-\']*)(?:\s\([^)]+\))?\s(\d+\.?\d{0,2})%/ig;
+        if(country["People and Society"]["Religions"] != undefined){
+          var religionsString = country["People and Society"]["Religions"]["text"];
+          var religionsArray;
+          while ((religionsArray = religionsRE.exec(religionsString)) !== null) {
+            if(religionsArray[1].indexOf("less than")==-1){
+              religions[capitalizeFirstLetter(religionsArray[1])] = parseFloat(religionsArray[2]);
+            }
+          }
+          if(Object.keys(religions).length === 1){
+            religions["No data available"] = 100;
+          }
+        }
+        else{
+          religions["No data available"] = 100;
+        }
+
+        if(country["People and Society"]["Ethnic groups"] != undefined){
+          var ethnicString = country["People and Society"]["Ethnic groups"]["text"];
+          var ethnicArray;
+          while ((ethnicArray = religionsRE.exec(ethnicString)) !== null) {
+            ethnicGroups[capitalizeFirstLetter(ethnicArray[1])] = parseFloat(ethnicArray[2]);
+          }
+          if(Object.keys(ethnicGroups).length === 1){
+            ethnicGroups["No data available"] = 100;
+          }
+        }
+        else{
+          ethnicGroups["No data available"] = 100;
+        }
+        
         parsedCountry.name = name;
         parsedCountry.population = population;
         parsedCountry.age = age;
         parsedCountry.gender = gender;
+        parsedCountry.religions = religions;
+        parsedCountry.ethnicGroups = ethnicGroups;
         populations.push(parsedCountry);
       });
       res.status(200).json(populations);
