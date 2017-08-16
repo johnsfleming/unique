@@ -28,7 +28,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "@types/jquery": "^3.2.11",
-    "angular2-counto": "^1.2.3",
+    "angular2-counto": "johnsfleming/angular2-counto",
     "body-parser": "^1.17.2",
     "core-js": "^2.4.1",
     "express": "^4.15.3",
