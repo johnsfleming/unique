@@ -1,0 +1,37 @@
+.tweetbutton {
+  height: 28px;
+  font-size:13px;
+  border-radius: 4px;
+  padding: 1px 10px 1px 9px;
+  position: relative;
+  box-sizing: border-box;
+  background-color: #1b95e0;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  line-height:26px;
+
+}
+.tweetbutton:hover {
+	background-color: #0c7abf;
+  text-decoration: none;
+}
+
+.tweetbutton i{
+  top:4px;
+  height:18px;
+  width:18px;
+  position:relative;
+  display:inline-block;
+  background: transparent 0 0 no-repeat;
+  background-image: url('../../../assets/images/twitter.svg');
+}
+
+.tweetbutton span{
+  margin-left: 4px;
+  font: normal normal normal 'Helvetica Neue',Arial,sans-serif;
+  display:inline-block;
+  vertical-align:top;
+  zoom:1;
+  white-space:nowrap;
+}

@@ -1,5 +1,5 @@
 <div class="row" *ngIf="isDataAvailable">
-  <div class="col-4 offset-4" style="height:75vw;">
+  <div class="col-4 offset-4" style="padding-bottom:100px;">
     <h2 class="text-center page-header">You are 1 in <span id="demographic" counto [step]="50" [countTo]="demographic" [countFrom]="previousdemographic" [duration]="4" (countoChange)="counto = $event">{{counto}}</span></h2>
     <div class="form-group">
     <form name="myForm">
@@ -50,11 +50,12 @@
       </select>
     </form>
     </div>
+    <button class="btn btn-primary" (click)="registerQuery()">Record This Demographic Profile</button>
+    <a href="https://twitter.com/intent/tweet?text=I%20am%20a%20{{selectedEthnicGroup=='Leave blank' ? '' : selectedEthnicGroup+',%20'}}{{selectedReligion=='Leave blank' ? '' : selectedReligion+',%20'}}{{selectedAgeRange=='Leave blank' ? '' : selectedAgeRange.slice(0, -1)+'%20old%20'}}{{gender=='Leave blank' ? 'person%20' : gender+'%20'}}{{selectedCountry.name=='World' ? 'from Earth' : 'from%20'+selectedCountry.name}}.%0D%0DI%20am%201%20in%20{{demographicString}}." class="twitter-share-button tweetbutton btn" data-size="large">
+      <i></i>
+      <span class="tweetlabel">Tweet</span>
+    </a>
+    <h2 class="text-center page-header" *ngIf="registeredQuery"><span id="queryCount">{{adjustedQueryCount}}</span> others have recorded this demographic profile.</h2>
   </div>
 </div>
-<footer class="panel footer" *ngIf="isDataAvailable">
-  <div class="container-fluid" id="footerContainer">
-    <p class="text-muted">All data pulled from the 2016 edition of the CIA World Factbook.</p>
-    <span class="text-muted">Designed and developed by <a href="https://github.com/johnsfleming" target="_blank">John Fleming</a></span>
-  </div>
-</footer>
+

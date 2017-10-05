@@ -20,3 +20,25 @@ export class Country {
 	religions: any;
 	ethnicGroups: any;
 }
+
+export class Query {
+	_id?: string;
+	country: string;
+	age: string;
+	gender: string;
+	religion: string;
+	ethnicity: string;
+	count: number;
+}
+
+export function createQuery(_id?:string,country?:string, age?:string,gender?:string,religion?:string,ethnicity?:string, count?:number): Query {
+  return {
+    _id,
+    country,
+    age,
+    gender,
+    religion,
+    ethnicity,
+    count 
+  }
+}
