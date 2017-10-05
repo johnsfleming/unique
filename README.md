@@ -1,4 +1,4 @@
-Unique
+# Unique
 
 A MEAN stack practice app.
 
